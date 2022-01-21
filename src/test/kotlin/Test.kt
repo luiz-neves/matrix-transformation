@@ -1,11 +1,27 @@
+import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.core.spec.style.freeSpec
-import io.kotest.core.spec.style.funSpec
 import io.kotest.core.spec.style.scopes.FreeSpecContainerScope
 import io.kotest.matchers.shouldBe
 import java.io.File
 
+const val tmpDirPath = "src/test/resources/tmp"
+
 class Test : FreeSpec() {
+    override fun beforeSpec(spec: Spec) {
+        val tmpDir = File(tmpDirPath)
+        if (tmpDir.exists()) {
+            tmpDir.deleteRecursively()
+        }
+        tmpDir.mkdir()
+
+        super.beforeSpec(spec)
+    }
+
+    override fun afterSpec(spec: Spec) {
+        File(tmpDirPath).deleteRecursively()
+        super.afterSpec(spec)
+    }
+
     init {
         "DRAW SHAPE" - {
             "Base case" - {
@@ -42,7 +58,7 @@ class Test : FreeSpec() {
 
 suspend fun FreeSpecContainerScope.testFactory(testCase: String) = "Test case $testCase" {
         val inputFilePath = "src/test/resources/casos_de_teste/input/$testCase.txt"
-        val actualOutputFilePath = "src/test/resources/tmp/$testCase.pgm"
+        val actualOutputFilePath = "$tmpDirPath/$testCase.pgm"
         val args = arrayOf(inputFilePath, actualOutputFilePath)
 
         EP2_esqueleto.main(args)
