@@ -173,10 +173,20 @@ class Matrix {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public Matrix multiply(Matrix m){
+        int rows = this.lin;
+        int columns = m.col;
+        int n = this.col;
 
-        // TODO: implementar!
+        Matrix result = new Matrix(rows, columns);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                for (int k = 0; k < n; k++) {
+                    result.set(i, j, result.get(i, j) + this.get(i, k) * m.get(k, j));
+                }
+            }
+        }
 
-        return null;
+        return result;
     }
 
     public Vector transform(Vector v){
@@ -187,17 +197,12 @@ class Matrix {
     }
 
     public static Matrix get_rotation_matrix(double theta){
-
-        // TODO: implementar!
-
-        return Matrix.identity(3);
+        theta = Math.toRadians(theta);
+        return new Matrix(2, 2, new double[]{Math.cos(theta), -Math.sin(theta), Math.sin(theta), Math.cos(theta)});
     }
 
     public static Matrix get_scale_matrix(double k){
-
-        // TODO: implementar!
-
-        return Matrix.identity(3);
+        return new Matrix(3, 3, new double[]{k, 0, 0, 0, k, 0, 0, 1, 0});
     }
 
     public static Matrix get_translation_matrix(Vector v){

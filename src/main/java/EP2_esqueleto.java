@@ -36,6 +36,9 @@
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class EP2_esqueleto {
@@ -92,6 +95,7 @@ public class EP2_esqueleto {
         // abertura do arquivo de entrada, e leitura dos parametros fixos (parametros da imagem e do observador, quantidade de shapes):
 
         in = new Scanner(new FileInputStream(input_file_name));
+        in.useLocale(Locale.ROOT);
 
         width = in.nextInt();
         height = in.nextInt();
@@ -136,13 +140,23 @@ public class EP2_esqueleto {
             if(command.equals(DRAW_SHAPE) || command.equals(DRAW_SHAPE_BASE)){
 
                 int shape_id = in.nextInt();
-                int color = in.nextInt();;
+                Shape shape = shapes[shape_id];
+                List<Vector> finalImage = new ArrayList<>();
+
+                int color = in.nextInt();
 
                 if(command.equals(DRAW_SHAPE)){
 
                     double rotation = in.nextDouble();
                     double scale = in.nextDouble();
                     Vector t = new Vector(in.nextDouble(), in.nextDouble());
+
+                    for (int i = 0; i < shape.nVertices(); i++) {
+                        Vector p = shape.get(i);
+                        Vector rotatedP = rotation(p, rotation);
+
+                        finalImage.add(rotatedP);
+                    }
 
                     // TODO: fala algo por aqui...
                 }
@@ -156,14 +170,12 @@ public class EP2_esqueleto {
                     // TODO: fala algo por aqui...
                 }
 
-                Shape s = shapes[shape_id];
-
-                for(int i = 0; i < s.nVertices() - 1; i++){
+                for(int i = 0; i < finalImage.size() - 1; i++){
 
                     // TODO: fala algo por aqui...
 
-                    Vector v1 = s.get(i);
-                    Vector v2 = s.get(i + 1);
+                    Vector v1 = finalImage.get(i);
+                    Vector v2 = finalImage.get(i + 1);
                     img.draw_line(v1, v2, color);
                 }
             }
@@ -173,5 +185,12 @@ public class EP2_esqueleto {
         }
 
         img.save(output_file_name);	// salva imagem no arquivo de saida
+    }
+
+    private static Vector rotation(Vector v, double theta) {
+        Matrix p = new Matrix(2, 1, new double[] {v.getX(), v.getY()});
+        Matrix rotationMatrix = Matrix.get_rotation_matrix(theta);
+        Matrix result = rotationMatrix.multiply(p);
+        return new Vector(result.get(0, 0), result.get(1, 0));
     }
 }
