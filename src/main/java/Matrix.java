@@ -210,7 +210,7 @@ class Matrix {
     }
 
     public static Matrix get_transformation_matrix(Vector e1, Vector e2, Vector t){
-        return new Matrix(3, 3, new double[]{e1.getX(), e2.getX(), t.getX(), e1.getY(), e2.getY(), t.getY(), 0, 0, 1});
+        return new Matrix(2, 3, new double[]{e1.getX(), e2.getX(), t.getX(), e1.getY(), e2.getY(), t.getY()});
     }
 
     public static Matrix get_observer_matrix(Vector position, Vector direction){
