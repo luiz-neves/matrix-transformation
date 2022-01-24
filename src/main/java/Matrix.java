@@ -202,7 +202,7 @@ class Matrix {
     }
 
     public static Matrix get_scale_matrix(double k){
-        return new Matrix(3, 3, new double[]{k, 0, 0, 0, k, 0, 0, 1, 0});
+        return new Matrix(3, 3, new double[]{k, 0, 0, 0, k, 0, 0, 0, 1});
     }
 
     public static Matrix get_translation_matrix(Vector v){

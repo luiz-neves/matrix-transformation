@@ -141,7 +141,7 @@ public class EP2_esqueleto {
 
                 int shape_id = in.nextInt();
                 Shape shape = shapes[shape_id];
-                List<Vector> finalImage = new ArrayList<>();
+                Vector[] finalImage = new Vector[shape.nVertices()];
 
                 int color = in.nextInt();
 
@@ -151,11 +151,17 @@ public class EP2_esqueleto {
                     double scale = in.nextDouble();
                     Vector t = new Vector(in.nextDouble(), in.nextDouble());
 
-                    for (int i = 0; i < shape.nVertices(); i++) {
+                    for (int i = 0; i < finalImage.length; i++) {
                         Vector p = shape.get(i);
                         Vector rotatedP = rotation(p, rotation);
 
-                        finalImage.add(rotatedP);
+                        finalImage[i] = rotatedP;
+                    }
+
+                    for (int i = 0; i < finalImage.length; i++) {
+                        Vector scaledP = scale(finalImage[i], scale);
+
+                        finalImage[i] = scaledP;
                     }
 
                     // TODO: fala algo por aqui...
@@ -170,12 +176,12 @@ public class EP2_esqueleto {
                     // TODO: fala algo por aqui...
                 }
 
-                for(int i = 0; i < finalImage.size() - 1; i++){
+                for(int i = 0; i < finalImage.length - 1; i++){
 
                     // TODO: fala algo por aqui...
 
-                    Vector v1 = finalImage.get(i);
-                    Vector v2 = finalImage.get(i + 1);
+                    Vector v1 = finalImage[i];
+                    Vector v2 = finalImage[i + 1];
                     img.draw_line(v1, v2, color);
                 }
             }
@@ -191,6 +197,13 @@ public class EP2_esqueleto {
         Matrix p = new Matrix(2, 1, new double[] {v.getX(), v.getY()});
         Matrix rotationMatrix = Matrix.get_rotation_matrix(theta);
         Matrix result = rotationMatrix.multiply(p);
+        return new Vector(result.get(0, 0), result.get(1, 0));
+    }
+
+    private static Vector scale(Vector v, double scale) {
+        Matrix p = new Matrix(3, 1, new double[] {v.getX(), v.getY(), 1});
+        Matrix scaleMatrix = Matrix.get_scale_matrix(scale);
+        Matrix result = scaleMatrix.multiply(p);
         return new Vector(result.get(0, 0), result.get(1, 0));
     }
 }
