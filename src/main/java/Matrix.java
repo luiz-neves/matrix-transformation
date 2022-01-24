@@ -206,10 +206,7 @@ class Matrix {
     }
 
     public static Matrix get_translation_matrix(Vector v){
-
-        // TODO: implementar!
-
-        return Matrix.identity(3);
+        return new Matrix(4, 4, new double[]{ 1, 0, 0, v.getX(), 0, 1, 0, v.getY(), 0, 0, 1, 1, 0, 0, 0, 1 });
     }
 
     public static Matrix get_transformation_matrix(Vector e1, Vector e2, Vector t){

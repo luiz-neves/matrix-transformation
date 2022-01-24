@@ -36,8 +36,6 @@
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -153,15 +151,9 @@ public class EP2_esqueleto {
 
                     for (int i = 0; i < finalImage.length; i++) {
                         Vector p = shape.get(i);
-                        Vector rotatedP = rotation(p, rotation);
-
-                        finalImage[i] = rotatedP;
-                    }
-
-                    for (int i = 0; i < finalImage.length; i++) {
-                        Vector scaledP = scale(finalImage[i], scale);
-
-                        finalImage[i] = scaledP;
+                        finalImage[i] = rotation(p, rotation);
+                        finalImage[i] = scale(finalImage[i], scale);
+                        finalImage[i] = translate(finalImage[i], t);
                     }
 
                     // TODO: fala algo por aqui...
@@ -204,6 +196,13 @@ public class EP2_esqueleto {
         Matrix p = new Matrix(3, 1, new double[] {v.getX(), v.getY(), 1});
         Matrix scaleMatrix = Matrix.get_scale_matrix(scale);
         Matrix result = scaleMatrix.multiply(p);
+        return new Vector(result.get(0, 0), result.get(1, 0));
+    }
+
+    private static Vector translate(Vector v, Vector translateVector) {
+        Matrix p = new Matrix(4, 1, new double[] {v.getX(), v.getY(), 1, 1});
+        Matrix translationMatrix = Matrix.get_translation_matrix(translateVector);
+        Matrix result = translationMatrix.multiply(p);
         return new Vector(result.get(0, 0), result.get(1, 0));
     }
 }
