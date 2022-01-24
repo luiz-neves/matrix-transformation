@@ -155,8 +155,6 @@ public class EP2_esqueleto {
                         finalImage[i] = scale(finalImage[i], scale);
                         finalImage[i] = translate(finalImage[i], t);
                     }
-
-                    // TODO: fala algo por aqui...
                 }
 
                 if(command.equals(DRAW_SHAPE_BASE)){
@@ -165,7 +163,10 @@ public class EP2_esqueleto {
                     Vector e2 = new Vector(in.nextDouble(), in.nextDouble());
                     Vector t = new Vector(in.nextDouble(), in.nextDouble());
 
-                    // TODO: fala algo por aqui...
+                    for (int i = 0; i < finalImage.length; i++) {
+                        Vector p = shape.get(i);
+                        finalImage[i] = transform(p, e1, e2, t);
+                    }
                 }
 
                 for(int i = 0; i < finalImage.length - 1; i++){
@@ -203,6 +204,13 @@ public class EP2_esqueleto {
         Matrix p = new Matrix(4, 1, new double[] {v.getX(), v.getY(), 1, 1});
         Matrix translationMatrix = Matrix.get_translation_matrix(translateVector);
         Matrix result = translationMatrix.multiply(p);
+        return new Vector(result.get(0, 0), result.get(1, 0));
+    }
+
+    private static Vector transform(Vector v, Vector e1, Vector e2, Vector t) {
+        Matrix p = new Matrix(3, 1, new double[] { v.getX(), v.getY(), 1 });
+        Matrix transformationMatrix = Matrix.get_transformation_matrix(e1, e2, t);
+        Matrix result = transformationMatrix.multiply(p);
         return new Vector(result.get(0, 0), result.get(1, 0));
     }
 }
