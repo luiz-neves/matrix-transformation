@@ -190,10 +190,14 @@ class Matrix {
     }
 
     public Vector transform(Vector v){
-
-        // TODO: implementar!
-
-        return v;
+        Matrix p;
+        if (this.col == 3) {
+            p = new Matrix(3, 1, new double[]{v.getX(), v.getY(), 1});
+        } else {
+            p = new Matrix(2, 1, new double[]{v.getX(), v.getY()});
+        }
+        Matrix result = this.multiply(p);
+        return new Vector(result.get(0, 0), result.get(1, 0));
     }
 
     public static Matrix get_rotation_matrix(double theta){
@@ -214,9 +218,9 @@ class Matrix {
     }
 
     public static Matrix get_observer_matrix(Vector position, Vector direction){
-
-        // TODO: implementar!
-
-        return Matrix.identity(3);
+        Matrix dir = get_rotation_matrix(-90);
+        Vector d = dir.transform(direction);
+        Matrix r = new Matrix(3, 3, new double[] {d.getX(), direction.getX(), position.getX(), d.getY(), direction.getY(), position.getY(), 0, 0, 1});
+        return r.invert3x3();
     }
 }

@@ -170,11 +170,8 @@ public class EP2_esqueleto {
                 }
 
                 for(int i = 0; i < finalImage.length - 1; i++){
-
-                    // TODO: fala algo por aqui...
-
-                    Vector v1 = finalImage[i];
-                    Vector v2 = finalImage[i + 1];
+                    Vector v1 = observer(finalImage[i], observer, direction);
+                    Vector v2 = observer(finalImage[i + 1], observer, direction);
                     img.draw_line(v1, v2, color);
                 }
             }
@@ -187,17 +184,13 @@ public class EP2_esqueleto {
     }
 
     private static Vector rotation(Vector v, double theta) {
-        Matrix p = new Matrix(2, 1, new double[] {v.getX(), v.getY()});
         Matrix rotationMatrix = Matrix.get_rotation_matrix(theta);
-        Matrix result = rotationMatrix.multiply(p);
-        return new Vector(result.get(0, 0), result.get(1, 0));
+        return rotationMatrix.transform(v);
     }
 
     private static Vector scale(Vector v, double scale) {
-        Matrix p = new Matrix(3, 1, new double[] {v.getX(), v.getY(), 1});
         Matrix scaleMatrix = Matrix.get_scale_matrix(scale);
-        Matrix result = scaleMatrix.multiply(p);
-        return new Vector(result.get(0, 0), result.get(1, 0));
+        return scaleMatrix.transform(v);
     }
 
     private static Vector translate(Vector v, Vector translateVector) {
@@ -208,9 +201,12 @@ public class EP2_esqueleto {
     }
 
     private static Vector transform(Vector v, Vector e1, Vector e2, Vector t) {
-        Matrix p = new Matrix(3, 1, new double[] { v.getX(), v.getY(), 1 });
         Matrix transformationMatrix = Matrix.get_transformation_matrix(e1, e2, t);
-        Matrix result = transformationMatrix.multiply(p);
-        return new Vector(result.get(0, 0), result.get(1, 0));
+        return transformationMatrix.transform(v);
+    }
+
+    private static Vector observer(Vector v, Vector observer, Vector direction) {
+        Matrix observerMatrix = Matrix.get_observer_matrix(observer, direction);
+        return observerMatrix.transform(v);
     }
 }
